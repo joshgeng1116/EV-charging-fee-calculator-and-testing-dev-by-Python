@@ -1,4 +1,5 @@
-# FIT2107_S2_2021
+# FIT2107_S2_2021 Team NullPointerException
+Jeremy Chrimes, Jinyun Geng & Lantao Yang
 
 ## Setting up and running the project via the terminal
 
