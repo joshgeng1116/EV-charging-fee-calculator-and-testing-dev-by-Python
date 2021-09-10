@@ -1,3 +1,13 @@
+"""
+FIT2107 2021 Semester 2 - NullPointerException
+
+Date First Modified: 2021-09-10
+Date Modified: 2021-00-10
+
+A file which a class called Caluclator_Form that will validate the data
+in the Joules Up charging calculator website. 
+"""
+
 from flask_wtf import FlaskForm
 from wtforms import StringField, DateField, TimeField
 from wtforms.validators import DataRequired, ValidationError, Optional

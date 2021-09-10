@@ -1,3 +1,12 @@
+"""
+FIT2107 2021 Semester 2 - NullPointerException
+
+Date First Modified: 2021-09-10
+Date Modified: 2021-00-10
+
+A file which will launch the Joules Up charging calculator and Route requests.
+"""
+
 from flask import Flask, flash
 from flask import render_template
 from flask import request

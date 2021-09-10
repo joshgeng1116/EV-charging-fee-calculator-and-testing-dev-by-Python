@@ -1,3 +1,13 @@
+"""
+FIT2107 2021 Semester 2 - NullPointerException
+
+Date First Modified: 2021-09-10
+Date Modified: 2021-00-10
+
+A file which a class called calculator that runs the calculations for the 
+Joules Up battery charging online calculator. 
+"""
+
 class Calculator():
     # you can choose to initialise variables here, if needed.
     def __init__(self):
