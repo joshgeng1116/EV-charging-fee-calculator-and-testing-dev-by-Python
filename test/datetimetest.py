@@ -17,7 +17,10 @@ class TestDateTime(unittest.TestCase):
         self.assertAlmostEqual(calc.cost_calculation(20,75,80,True, False), 6.60)
     
     # Test off-peak non-holiday (T404)
-
+    def test_weekday_night(self):
+        calc = Calculator()
+        self.assertEqual(calc.time_calculation(20, 75, 80, False, False), 2)
+        self.assertAlmostEqual(calc.cost_calculation(20, 75, 80, False, False), 3.30)
     # Test peak holiday(T505)
     def test_peak_holiday(self):
         calc = Calculator()
