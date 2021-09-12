@@ -1,7 +1,7 @@
 """
 FIT2107 2021 Semester 2 - NullPointerException
 
-Date First Modified: 2021-09-10
+Date Created: 2021-09-10 (Jeremy)
 Date Modified: 2021-00-10
 
 A test class to test REQ-1. 
