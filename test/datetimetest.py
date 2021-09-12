@@ -16,16 +16,8 @@ class TestDateTime(unittest.TestCase):
         self.assertEqual(calc.time_calculation(20, 75, 80, 22), 2)
         self.assertAlmostEqual(calc.cost_calculation(20,75,80,True, False), 6.60)
     
-    # Test Weekday nighttime (T404)
+    # Test off-peak non-holiday (T404)
 
-    # Test weekday day and night (T603)
+    # Test peak holiday(T505)
 
-    # Test Weekday night and day (T702)
-
-    # Test Weekend daytime (T505)
-
-    # Test Weekday nighttime (T705)
-
-    # Test weekend day and night 
-
-    # test weekend night start and day stop 
+    # Test off-peak holiday (T705)
