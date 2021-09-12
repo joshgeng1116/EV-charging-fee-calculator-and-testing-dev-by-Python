@@ -18,5 +18,8 @@ class TestDateTime(unittest.TestCase):
     # Test off-peak non-holiday (T404)
 
     # Test peak holiday(T505)
+    def test_peak_holiday(self):
+        calcu = Calculator()
+        self.assertEqual("2 Hours 0 Minutes", calcu.is_peak(), calcu.is_holiday(),)
 
     # Test off-peak holiday (T705)
