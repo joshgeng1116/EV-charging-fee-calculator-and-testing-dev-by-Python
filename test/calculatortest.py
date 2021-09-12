@@ -9,7 +9,7 @@ A test class to test REQ-1.
 from app.calculator import *
 import unittest
 
-class TestDateTime(unittest.TestCase):
+class CalculatorTest(unittest.TestCase):
     # Test peak non-holiday (T000)
     def test_peak_non_holiday(self):
         calc = Calculator()
@@ -32,3 +32,4 @@ class TestDateTime(unittest.TestCase):
         calc = Calculator()
         self.assertAlmostEqual(calc.time_calculation(50, 60, 50, 2), 2.5)
         self.assertAlmostEqual(calc.cost_calculation(50, 60, 50, False, True), 0.13)
+        
