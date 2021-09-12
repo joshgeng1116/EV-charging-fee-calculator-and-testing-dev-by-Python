@@ -15,18 +15,8 @@ class TestDateTime(unittest.TestCase):
         Calculator()
         self.assertEqual()
     
-    # Test Weekday nighttime (T404)
+    # Test off-peak non-holiday (T404)
 
-    # Test weekday day and night (T603)
+    # Test peak holiday(T505)
 
-    # Test Weekday night and day (T702)
-
-    # Test Weekend daytime (T505)
-
-    # Test Weekday nighttime (T705)
-
-    # Test weekend day and night 
-
-    # test weekend night start and day stop 
-
-    
+    # Test off-peak holiday (T705)
