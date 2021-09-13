@@ -1,6 +1,15 @@
 stages:
-    - build
     - test
+    - build
+
+test:
+  stage: test
+  image: python:3.8-alpine
+  script:
+      - echo "Testing"
+      - pip3 install --upgrade pip
+      - pip3 install -r requirements.txt
+      - python3 -m unittest test/calculatortest.py   
 
 build:
     stage: build
@@ -11,11 +20,3 @@ build:
         - pip3 install -r requirements.txt
         - python3 app.py
 
-test:
-    stage: test
-    image: python:3.8-alpine
-    script:
-        - echo "Testing"
-        - pip3 install --upgrade pip
-        - pip3 install -r requirements.txt
-        - python3 -m unittest test/calculatortest.py
