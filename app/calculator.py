@@ -54,6 +54,7 @@ class Calculator():
 
     def get_minutes_in_peak_weekday(self) -> float:
         pass
+        
 
     def get_minutes_in_offpeak_weekday(self) -> float:
         pass
