@@ -19,7 +19,6 @@ class Calculator():
         self.final_state = final_state 
         self.capacity = capacity
         self.power = power
-        self.time_taken = self.time_calculation()
         
 
     # you may add more parameters if needed, you may modify the formula also.
@@ -40,10 +39,10 @@ class Calculator():
     # you may add more parameters if needed, you may also modify the formula.
     def time_calculation(self) -> float:
         """
-        A method which returns the time a charge will take. 
+        A method which returns the time a charge will take in hours. 
         """
         time = (self.final_state - self.initial_state) / 100 * self.capacity / self.power
-        return time * 60
+        return time
 
 
     # you may create some new methods at your convenience, or modify these methods, or choose not to use them.
@@ -53,16 +52,21 @@ class Calculator():
     def is_peak(self):
         pass
 
-    def minutes_in_peak(self) -> float:
+    def get_minutes_in_peak_weekday(self) -> float:
+        pass
+
+    def get_minutes_in_offpeak_weekday(self) -> float:
+        pass
+
+    def get_minutes_in_peak_holiday(self) -> float:
+        pass
+
+    def get_minutes_in_offpeak_holiday(self) -> float:
         pass
 
 
-
-    def peak_period(self, start_time):
-        pass
-
-    def get_duration(self, start_time):
-        pass
+    def get_duration_in_minutes(self) -> float:
+        return self.time_calculation() * 60
 
     # to be acquired through API
     def get_sun_hour(self, sun_hour):
