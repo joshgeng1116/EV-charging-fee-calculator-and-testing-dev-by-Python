@@ -49,7 +49,7 @@ class CalculatorTest(unittest.TestCase):
     def test_off_peak_holiday(self):
         calc = Calculator(50, 60, 50, 2, "20:00", "2021-08-22")
         self.assertAlmostEqual(calc.time_calculation(), 2.5)
-        self.assertEqual(calc.get_duration_in_minutes(), 120)
+        self.assertEqual(calc.get_duration_in_minutes(), 150)
         # self.assertEqual(calc.get_minutes_in_peak_weekday(), 0)
         # self.assertEqual(calc.get_minutes_in_offpeak_weekday(), 0)
         # self.assertEqual(calc.get_minutes_in_peak_holiday(), 0)
