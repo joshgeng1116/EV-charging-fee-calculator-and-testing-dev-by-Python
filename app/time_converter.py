@@ -7,7 +7,7 @@ def time_to_minutes(time_input):
     
     hour = int(ar[0])
     minute = int(ar[1])
-    
+
     # Check time within boundaries 
     if not(minute >= 0 and minute < 60):
         raise ValueError("Minutes must be in the range 0 - 59")

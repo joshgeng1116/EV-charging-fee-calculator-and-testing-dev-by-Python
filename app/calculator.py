@@ -9,7 +9,8 @@ Joules Up battery charging online calculator.
 """
 
 from datetime import time
-from typing import final
+
+from .time_converter import *
 
 
 class Calculator():
@@ -92,4 +93,9 @@ class Calculator():
     def calculate_solar_energy(self):
         pass
 
+    def number_of_days(self, start_time) ->float:
+        start_time_minutes = time_to_minutes(start_time)
+        time_cost_in_minutes = self.get_duration_in_minutes()
+        days = (start_time_minutes + time_cost_in_minutes) // 1440
+        return days
 
