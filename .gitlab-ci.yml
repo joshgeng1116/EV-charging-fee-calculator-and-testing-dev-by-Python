@@ -9,17 +9,15 @@ build:
         - echo "Building"
         - pip3 install --upgrade pip
         - pip3 install -r requirements.txt
-        - python3 app/calculator.py
+        - python3 -m app.calculator
 
 test:
   stage: test
   image: python:3.8-alpine
   script:
       - echo "Testing"
-      - pip3 install --upgrade pip
-      - pip3 install -r requirements.txt
-      - python3 -m unittest test/calculatortest.py   
-      - python3 -m unittest test/timeconvertertest.py
+      - pip install -r requirements.txt
+      - python -m unittest test
 
 
 

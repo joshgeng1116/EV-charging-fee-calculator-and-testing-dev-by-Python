@@ -57,6 +57,7 @@ class CalculatorTest(unittest.TestCase):
         # self.assertAlmostEqual(calc.cost_calculation(False, True), 0.13, places=2)
 
 
+
 def main():
     suite = unittest.TestLoader().loadTestsFromTestCase(CalculatorTest)
     unittest.TextTestRunner(verbosity=2).run(suite)
