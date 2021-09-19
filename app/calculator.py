@@ -66,27 +66,43 @@ class Calculator():
 
         # Loop through however many days there are 
         for i in range(days + 1):
-            new_date: str = )date.fromisoformat(self.start_date) + timedelta(days = i)).isoformat()
-            if is_holiday(self.start_date) == False:
-                if (start_time < 360):
-                    if (start_time + duration < 360):
-                        weekday_off_peak += duration
-                    elif (start_time + duration >= 360 and start_time + duration < 1080):
-                        weekday_peak += start_time + duration - 360
-                        weekday_off_peak += 360 - start_time
-                    elif (start_time + duration >= 1080 and start_time + duration < 1440):
-                        weekday_peak += 720
-                        weekday_off_peak += duration - 720
-                elif (start_time >= 360 and start_time < 1080):
-                    if (start_time + duration >= 360 and start_time + duration < 1080):
-                        weekday_peak += duration
-                    elif (start_time + duration >= 1080 and start_time + duration < 1440):
-                        weekday_peak += 1080 - start_time
-                        weekday_off_peak += start_time + duration - 1080
-                elif (start_time >= 1080 and start_time + duration < 1440):
-                    weekday_off_peak = duration
+            new_date: str = (date.fromisoformat(self.start_date) + timedelta(days = i)).isoformat()
+            if (i == 0):
+                new_duration = start_time + duration - days * 1440
+                off_peak, peak, new_duration = self.minutes_off_peak_and_peak(start_time, int(new_duration))
+                duration -= new_duration
+            elif ( 0 < i and i < days):
+                new_duration = 1440
+                off_peak, peak, remain_duration = self.minutes_off_peak_and_peak(0, int(new_duration))
+                duration -= 1440
+            elif (i == days):
+                new_duration = duration
+                off_peak, peak, new_duration = self.minutes_off_peak_and_peak(0, int(new_duration))
 
 
+    def minutes_off_peak_and_peak(self, start_time_mins: int, duration_mins: int):
+
+        peak = 0
+        off_peak = 0
+        if (start_time_mins < 360):
+            if (start_time_mins + duration_mins < 360):
+                off_peak += duration_mins
+            elif (start_time_mins + duration_mins >= 360 and start_time_mins + duration_mins < 1080):
+                peak += start_time_mins + duration_mins - 360
+                off_peak += 360 - start_time_mins
+            elif (start_time_mins + duration_mins >= 1080 and start_time_mins + duration_mins < 1440):
+                peak += 720
+                off_peak += duration_mins - 720
+        elif (start_time_mins >= 360 and start_time_mins < 1080):
+            if (start_time_mins + duration_mins >= 360 and start_time_mins + duration_mins < 1080):
+                peak += duration_mins
+            elif (start_time_mins + duration_mins >= 1080 and start_time_mins + duration_mins < 1440):
+                peak += 1080 - start_time_mins
+                off_peak += start_time_mins + duration_mins - 1080
+        elif (start_time_mins >= 1080 and start_time_mins + duration_mins < 1440):
+            off_peak = duration_mins
+        duration = peak + off_peak
+        return [off_peak, peak, duration]
 
 
                     
@@ -120,7 +136,7 @@ class Calculator():
     def calculate_solar_energy(self):
         pass
 
-    def number_of_days(self) ->float:
+    def number_of_days(self) ->int:
         start_time_minutes = time_to_minutes(self.start_time)
         time_cost_in_minutes = self.get_duration_in_minutes()
         days = (start_time_minutes + time_cost_in_minutes) // 1440
