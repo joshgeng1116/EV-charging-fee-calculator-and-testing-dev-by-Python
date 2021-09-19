@@ -8,9 +8,10 @@ A file which a class called calculator that runs the calculations for the
 Joules Up battery charging online calculator. 
 """
 
-from datetime import time
+from datetime import date, timedelta, time
 
 from .time_converter import *
+from app import time_converter
 
 
 class Calculator():
@@ -20,6 +21,8 @@ class Calculator():
         self.final_state = final_state 
         self.capacity = capacity
         self.power = power
+        self.start_time = start_time
+        self.start_date = start_date
         
 
     # you may add more parameters if needed, you may modify the formula also.
@@ -48,23 +51,47 @@ class Calculator():
 
     # you may create some new methods at your convenience, or modify these methods, or choose not to use them.
     def is_holiday(self, start_date):
-        pass
+        return False
 
     def is_peak(self):
         pass
 
-    def get_minutes_in_peak_weekday(self) -> float:
-        pass
-        
+    def calculate_time_in_segment(self):
+        start_time = time_to_minutes(self.start_time)
+        duration = self.get_duration_in_minutes()
+        days = self.number_of_days()
 
-    def get_minutes_in_offpeak_weekday(self) -> float:
-        pass
+        weekday_peak = 0
+        weekday_off_peak = 0 
 
-    def get_minutes_in_peak_holiday(self) -> float:
-        pass
+        # Loop through however many days there are 
+        for i in range(days + 1):
+            new_date: str = )date.fromisoformat(self.start_date) + timedelta(days = i)).isoformat()
+            if is_holiday(self.start_date) == False:
+                if (start_time < 360):
+                    if (start_time + duration < 360):
+                        weekday_off_peak += duration
+                    elif (start_time + duration >= 360 and start_time + duration < 1080):
+                        weekday_peak += start_time + duration - 360
+                        weekday_off_peak += 360 - start_time
+                    elif (start_time + duration >= 1080 and start_time + duration < 1440):
+                        weekday_peak += 720
+                        weekday_off_peak += duration - 720
+                elif (start_time >= 360 and start_time < 1080):
+                    if (start_time + duration >= 360 and start_time + duration < 1080):
+                        weekday_peak += duration
+                    elif (start_time + duration >= 1080 and start_time + duration < 1440):
+                        weekday_peak += 1080 - start_time
+                        weekday_off_peak += start_time + duration - 1080
+                elif (start_time >= 1080 and start_time + duration < 1440):
+                    weekday_off_peak = duration
 
-    def get_minutes_in_offpeak_holiday(self) -> float:
-        pass
+
+
+
+                    
+
+
 
 
     def get_duration_in_minutes(self) -> float:
@@ -93,8 +120,8 @@ class Calculator():
     def calculate_solar_energy(self):
         pass
 
-    def number_of_days(self, start_time) ->float:
-        start_time_minutes = time_to_minutes(start_time)
+    def number_of_days(self) ->float:
+        start_time_minutes = time_to_minutes(self.start_time)
         time_cost_in_minutes = self.get_duration_in_minutes()
         days = (start_time_minutes + time_cost_in_minutes) // 1440
         return days
