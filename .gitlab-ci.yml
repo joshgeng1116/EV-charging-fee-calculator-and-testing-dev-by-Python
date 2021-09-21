@@ -19,7 +19,7 @@ test:
       - pip install -r requirements.txt
       - pip install coverage
       - python -m unittest test
-      - coverage run --branch -m test
+      - coverage run --branch -m unittest test
 
 
 
