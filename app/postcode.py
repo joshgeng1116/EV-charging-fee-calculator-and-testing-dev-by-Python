@@ -3,7 +3,7 @@ class Postcode:
         if len(postcode) == 4:
             self._postcode = postcode 
         else:
-            raise ValueError
+            raise InvalidPostcodeException
     
     def __is_nsw(self) -> bool:
         # 1000 - 1999

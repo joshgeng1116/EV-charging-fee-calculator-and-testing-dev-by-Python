@@ -85,3 +85,12 @@ class PostcodeTest(unittest.TestCase):
         self.assertEqual(Postcode("0810").get_state(), "NT", msg = "Postcode 0810 should be in NT")
         self.assertEqual(Postcode("0999").get_state(), "NT", msg = "Postcode 0999 should be in NT")
         self.assertNotEqual(Postcode("1000").get_state(), "NT", msg = "Postcode 1000 should notbe in NT")
+
+    def test_get_postcode(self):
+        self.assertEqual(Postcode("3000").get_postcode(), "3000", msg = "Postcode 3000 inputed into the Postcode should be 3000")    
+        
+        with self.assertRaises(InvalidPostcodeException, msg = "A 3 digit postcode should be invalid"):
+            Postcode("800").get_postcode()
+        with self.assertRaises(InvalidPostcodeException, msg = "A 5 digit postcode should be invalid"):
+            Postcode("10000").get_postcode()
+        
