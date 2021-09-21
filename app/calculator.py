@@ -50,38 +50,53 @@ class Calculator():
 
 
     # you may create some new methods at your convenience, or modify these methods, or choose not to use them.
-    def is_holiday(self, start_date):
+    def is_holiday(self, start_date: date, state: str) -> bool:
         return False
 
     def is_peak(self):
         pass
 
-    def calculate_time_in_segment(self):
+    def __calculate_time_in_segment(self):
         start_time = time_to_minutes(self.start_time)
         duration = self.get_duration_in_minutes()
-        days = self.number_of_days()
+        days = int(self.number_of_days())
 
         weekday_peak = 0
         weekday_off_peak = 0 
+        holiday_peak = 0 
+        holiday_off_peak = 0 
 
         # Loop through however many days there are 
         for i in range(days + 1):
-            new_date: str = (date.fromisoformat(self.start_date) + timedelta(days = i)).isoformat()
+            new_date: str = (date.fromisoformat(self.start_date) + timedelta(days = i))
+            peak = 0 
+            off_peak = 0
             if (i == 0):
-                new_duration = start_time + duration - days * 1440
-                off_peak, peak, new_duration = self.minutes_off_peak_and_peak(start_time, int(new_duration))
+                if (days == 0):
+                    new_duration = duration
+                else:
+                    new_duration = start_time + duration - 1400 * days
+                off_peak, peak, new_duration = self.__minutes_off_peak_and_peak(start_time, int(new_duration))
+                print(days)
                 duration -= new_duration
-            elif ( 0 < i and i < days):
+            elif (0 < i and i < days):
                 new_duration = 1440
-                off_peak, peak, remain_duration = self.minutes_off_peak_and_peak(0, int(new_duration))
+                off_peak, peak, remain_duration = self.__minutes_off_peak_and_peak(0, int(new_duration))
                 duration -= 1440
-            elif (i == days):
+            elif (i != 0 and i == days):
                 new_duration = duration
-                off_peak, peak, new_duration = self.minutes_off_peak_and_peak(0, int(new_duration))
+                off_peak, peak, new_duration = self.__minutes_off_peak_and_peak(0, int(new_duration))
+            
+            if self.is_holiday(new_date, "VIC") == True:
+                holiday_off_peak += off_peak
+                holiday_peak += peak
+            else:
+                weekday_off_peak += off_peak
+                weekday_peak += peak
+        
+        return (weekday_off_peak, weekday_peak, holiday_off_peak, holiday_peak)
 
-
-    def minutes_off_peak_and_peak(self, start_time_mins: int, duration_mins: int):
-
+    def __minutes_off_peak_and_peak(self, start_time_mins: int, duration_mins: int):
         peak = 0
         off_peak = 0
         if (start_time_mins < 360):
@@ -102,13 +117,19 @@ class Calculator():
         elif (start_time_mins >= 1080 and start_time_mins + duration_mins < 1440):
             off_peak = duration_mins
         duration = peak + off_peak
-        return [off_peak, peak, duration]
+        return (off_peak, peak, duration)
 
+    def get_minutes_in_peak_weekday(self):
+        return self.__calculate_time_in_segment()[1]
 
-                    
-
-
-
+    def get_minutes_in_offpeak_weekday(self):
+        return self.__calculate_time_in_segment()[0]
+    
+    def get_minutes_in_peak_holiday(self):
+        return self.__calculate_time_in_segment()[3]
+    
+    def get_minutes_in_offpeak_holiday(self):
+        return self.__calculate_time_in_segment()[2]
 
     def get_duration_in_minutes(self) -> float:
         return self.time_calculation() * 60
