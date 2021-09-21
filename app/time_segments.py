@@ -41,10 +41,7 @@ class TimeSegments:
                     new_duration = duration
                 else:
                     new_duration = (start_time + duration) - (1440 * days) - 1 
-                print(new_duration)
                 off_peak, peak, new_duration = self.__minutes_off_peak_and_peak(start_time, int(new_duration))
-                print(self.__minutes_off_peak_and_peak(start_time, int(new_duration)))
-                print(days)
                 duration -= new_duration
             elif (0 < i and i < days):
                 new_duration = 1440
@@ -55,11 +52,9 @@ class TimeSegments:
                 off_peak, peak, new_duration = self.__minutes_off_peak_and_peak(0, int(new_duration))
             
             if self.is_holiday(new_date) == True:
-                print("Holiday")
                 holiday_off_peak += off_peak
                 holiday_peak += peak
             else:
-                print(f"Weekday peak {peak} offpeak {off_peak}")
                 weekday_off_peak += off_peak
                 weekday_peak += peak
         

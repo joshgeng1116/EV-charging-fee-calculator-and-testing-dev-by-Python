@@ -20,6 +20,6 @@ class TestTimeSegment(TestCase):
     def test_weekday_weekend_offpeak(self):
         segments = TimeSegments("23:00", date.fromisoformat("2021-08-20"), 120, Postcode("3800"))
         self.assertEqual(segments.get_minutes_in_peak_weekday(), 0)
-        self.assertEqual(segments.get_minutes_in_offpeak_weekday(), 60)
+        self.assertEqual(segments.get_minutes_in_offpeak_weekday(), 59) 
         self.assertEqual(segments.get_minutes_in_peak_holiday(), 0)
-        self.assertEqual(segments.get_minutes_in_offpeak_holiday(), 60)
+        self.assertEqual(segments.get_minutes_in_offpeak_holiday(), 61)
