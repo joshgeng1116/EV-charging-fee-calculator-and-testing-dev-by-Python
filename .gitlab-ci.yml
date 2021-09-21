@@ -17,6 +17,7 @@ test:
   script:
       - echo "Testing"
       - pip install -r requirements.txt
+      - pip install coverage
       - python -m unittest test
       - coverage run --branch -m test
 
