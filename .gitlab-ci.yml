@@ -20,12 +20,13 @@ test:
         - echo "Testing"
         - pip install -r requirements.txt
         - pip install coverage
-        - python -m unittest test
-        - coverage run --branch -m unittest test
-        - coverage xml
+        - coverage run --source=app --branch -m unittest test
+        - coverage report -m 
+        - coverage html -d coverage-reports
+
     artefacts: 
-        reports:
-            cobertura: coverage.xml
+        paths:
+        - coverage-report/
 
 
 

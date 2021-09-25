@@ -1,7 +1,7 @@
 from .postcode import Postcode
 from .time_converter import time_to_minutes
 from datetime import date, timedelta
-from holidays import CountryHoliday
+from holidays import Australia as AUHolidays
 
 class TimeSegments:
     def __init__(self, start_time: str, start_date: date, duration: int, postcode: Postcode) -> None:
@@ -12,7 +12,7 @@ class TimeSegments:
         self.calculate_time_in_segment()
 
     def is_holiday(self, date) -> bool:
-        holidays_cal = CountryHoliday("AU", prov = self.postcode.get_state())
+        holidays_cal = AUHolidays(prov = self.postcode.get_state())
         # If day is on the weekend 
         if (date.isoweekday() in [6, 7]):
             return True
