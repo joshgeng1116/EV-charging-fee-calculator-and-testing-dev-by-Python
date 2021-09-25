@@ -24,7 +24,7 @@ test:
         - coverage report -m 
         - coverage html -d coverage-reports
 
-    artefacts: 
+    artifacts: 
         paths:
         - coverage-report/
 
