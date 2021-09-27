@@ -39,17 +39,20 @@ class TimeSegments:
             if (i == 0):
                 if (days == 0):
                     new_duration = duration
+                    off_peak, peak, remain_duration = self.__minutes_off_peak_and_peak(start_time, int(new_duration))
                 else:
-                    new_duration = (start_time + duration) - (1440 * days) - 1 
-                off_peak, peak, new_duration = self.__minutes_off_peak_and_peak(start_time, int(new_duration))
-                duration -= new_duration
+                    new_duration = 1440 - start_time
+                    off_peak, peak, remain_duration = self.__minutes_off_peak_and_peak(start_time, int(new_duration))
+                    duration -= remain_duration
             elif (0 < i and i < days):
                 new_duration = 1440
-                off_peak, peak, remain_duration = self.__minutes_off_peak_and_peak(0, int(new_duration))
+                # off_peak, peak, remain_duration = self.__minutes_off_peak_and_peak(0, int(new_duration))
+                off_peak = 720
+                peak = 720
                 duration -= 1440
             elif (i != 0 and i == days):
                 new_duration = duration
-                off_peak, peak, new_duration = self.__minutes_off_peak_and_peak(0, int(new_duration))
+                off_peak, peak, remain_duration = self.__minutes_off_peak_and_peak(0, int(new_duration))
             
             if self.is_holiday(new_date) == True:
                 holiday_off_peak += off_peak
@@ -75,15 +78,15 @@ class TimeSegments:
         elif (start_time_mins >= 360 and start_time_mins < 1080):
             if (start_time_mins + duration_mins >= 360 and start_time_mins + duration_mins < 1080):
                 peak += duration_mins
-            elif (start_time_mins + duration_mins >= 1080 and start_time_mins + duration_mins < 1440):
+            elif (start_time_mins + duration_mins >= 1080 and start_time_mins + duration_mins <= 1440):
                 peak += 1080 - start_time_mins
                 off_peak += start_time_mins + duration_mins - 1080
-        elif (start_time_mins >= 1080 and start_time_mins + duration_mins < 1440):
+        elif (start_time_mins >= 1080 and start_time_mins + duration_mins <= 1440):
             off_peak = duration_mins
         duration = peak + off_peak
         return (off_peak, peak, duration)
     
-    def number_of_days(self) ->int:
+    def number_of_days(self) -> int:
         start_time_minutes = time_to_minutes(self.start_time)
         time_cost_in_minutes = self.duration
         days = (start_time_minutes + time_cost_in_minutes) // 1440

@@ -60,7 +60,7 @@ class JoulesupChargeConfigurations:
     def get_form_json(self) -> List[Dict[str, str]]:
         return [config.get_form_json() for config in self.get_configs()]
     
-    def get_config(self, config_number) -> ChargingConfig:
+    def get_config(self, config_number: str) -> ChargingConfig:
         if (config_number == self.LEVEL_1.get_config_number()):
             return self.LEVEL_1
         elif (config_number == self.LEVEL_2.get_config_number()):

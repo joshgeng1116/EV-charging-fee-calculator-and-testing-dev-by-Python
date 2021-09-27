@@ -41,16 +41,16 @@ class TestTimeSegment(TestCase):
     def test_weekday_weekend_offpeak(self):
         segments = TimeSegments("23:00", date.fromisoformat("2021-08-20"), 120, Postcode("3800"))
         self.assertEqual(segments.get_minutes_in_peak_weekday(), 0)
-        self.assertEqual(segments.get_minutes_in_offpeak_weekday(), 59) 
+        self.assertEqual(segments.get_minutes_in_offpeak_weekday(), 60) 
         self.assertEqual(segments.get_minutes_in_peak_holiday(), 0)
-        self.assertEqual(segments.get_minutes_in_offpeak_holiday(), 61)
+        self.assertEqual(segments.get_minutes_in_offpeak_holiday(), 60)
 
     def test_weekend_weekday_offpeak(self):
         segments = TimeSegments("23:00", date.fromisoformat("2021-08-22"), 120, Postcode("3800"))
         self.assertEqual(segments.get_minutes_in_peak_weekday(), 0)
-        self.assertEqual(segments.get_minutes_in_offpeak_weekday(), 61) 
+        self.assertEqual(segments.get_minutes_in_offpeak_weekday(), 60) 
         self.assertEqual(segments.get_minutes_in_peak_holiday(), 0)
-        self.assertEqual(segments.get_minutes_in_offpeak_holiday(), 59)
+        self.assertEqual(segments.get_minutes_in_offpeak_holiday(), 60)
     
     def test_holiday_weekday_offpeak(self):
         segments = TimeSegments("23:00", date.fromisoformat("2021-09-24"), 120 ,Postcode("3800"))
@@ -67,9 +67,9 @@ class TestTimeSegment(TestCase):
         self.assertEqual(segments.get_minutes_in_offpeak_holiday(), 0)
     
     def test_long_time_combo_weekday(self):
-        segments = TimeSegments("17:00", date.fromisoformat("2021-08-18"), 1560 ,Postcode("3800"))
-        self.assertEqual(segments.get_minutes_in_peak_weekday(), 780)
-        self.assertEqual(segments.get_minutes_in_offpeak_weekday(), 780) 
+        segments = TimeSegments("17:00", date.fromisoformat("2021-08-18"), 1440,Postcode("3800"))
+        self.assertEqual(segments.get_minutes_in_peak_weekday(), 720)
+        self.assertEqual(segments.get_minutes_in_offpeak_weekday(), 720) 
         self.assertEqual(segments.get_minutes_in_peak_holiday(), 0)
         self.assertEqual(segments.get_minutes_in_offpeak_holiday(), 0)
 
@@ -83,13 +83,20 @@ class TestTimeSegment(TestCase):
     def test_long_time_combo_weekday_weekend(self):
         segments = TimeSegments("17:00", date.fromisoformat("2021-08-20"), 1560 ,Postcode("3800"))
         self.assertEqual(segments.get_minutes_in_peak_weekday(), 60)
-        self.assertEqual(segments.get_minutes_in_offpeak_weekday(), 359) 
+        self.assertEqual(segments.get_minutes_in_offpeak_weekday(), 360) 
         self.assertEqual(segments.get_minutes_in_peak_holiday(), 720)
-        self.assertEqual(segments.get_minutes_in_offpeak_holiday(), 421)
+        self.assertEqual(segments.get_minutes_in_offpeak_holiday(), 420)
 
     def test_long_time_combo_weekend_weekday(self):
         segments = TimeSegments("17:00", date.fromisoformat("2021-08-22"), 1560 ,Postcode("3800"))
         self.assertEqual(segments.get_minutes_in_peak_weekday(), 720)
-        self.assertEqual(segments.get_minutes_in_offpeak_weekday(), 421) 
+        self.assertEqual(segments.get_minutes_in_offpeak_weekday(), 420) 
         self.assertEqual(segments.get_minutes_in_peak_holiday(), 60)
-        self.assertEqual(segments.get_minutes_in_offpeak_holiday(), 359)
+        self.assertEqual(segments.get_minutes_in_offpeak_holiday(), 360)
+
+    def test_two_days_combo(self):
+        segments = TimeSegments("17:00", date.fromisoformat("2021-08-16"), 2880 ,Postcode("3800"))
+        self.assertEqual(segments.get_minutes_in_peak_weekday(), 1440)
+        self.assertEqual(segments.get_minutes_in_offpeak_weekday(), 1440) 
+        self.assertEqual(segments.get_minutes_in_peak_holiday(), 0)
+        self.assertEqual(segments.get_minutes_in_offpeak_holiday(), 0)

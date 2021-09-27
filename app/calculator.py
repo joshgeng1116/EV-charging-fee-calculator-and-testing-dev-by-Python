@@ -8,6 +8,7 @@ A file which a class called calculator that runs the calculations for the
 Joules Up battery charging online calculator. 
 """
 
+from app.chargeconfig import ChargingConfig
 from app.time_segments import TimeSegments
 from .postcode import Postcode
 from datetime import date, timedelta, time
@@ -18,11 +19,12 @@ from app import time_converter
 
 class Calculator():
     # you can choose to initialise variables here, if needed.
-    def __init__(self, inital_state, final_state, capacity, power, start_time, start_date, postcode: Postcode):
+    def __init__(self, inital_state: float, final_state: float, capacity: float, 
+        config: ChargingConfig, start_time: time, start_date: date, postcode: Postcode):
         self.initial_state = inital_state
         self.final_state = final_state 
         self.capacity = capacity
-        self.power = power
+        self.config = config
         self.start_time = start_time
         self.start_date = start_date
         self.postcode = postcode
@@ -31,18 +33,9 @@ class Calculator():
         
 
     # you may add more parameters if needed, you may modify the formula also.
-    def cost_calculation(self, is_peak, is_holiday):
-        if is_peak:
-            base_price = 100
-        else:
-            base_price = 50
+    def cost_calculation(self) -> float:
 
-        if is_holiday:
-            surcharge_factor = 1.1
-        else:
-            surcharge_factor = 1
-
-        cost = (self.final_state - self.initial_state) / 100 * self.capacity * self.base_price / 100 * surcharge_factor
+        cost = (self.final_state - self.initial_state) / 100 * self.capacity * self.config.get_base_price() / 100
         return cost
 
     # you may add more parameters if needed, you may also modify the formula.
@@ -50,7 +43,7 @@ class Calculator():
         """
         A method which returns the time a charge will take in hours. 
         """
-        time = (self.final_state - self.initial_state) / 100 * self.capacity / self.power
+        time = (self.final_state - self.initial_state) / 100 * self.capacity / self.config.get_power()
         return time
     
     def get_duration_in_minutes(self) -> int:

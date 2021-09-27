@@ -142,3 +142,4 @@ cython_debug/
 
 # Vscode Project Files
 .vscode/
+.DS_Store
