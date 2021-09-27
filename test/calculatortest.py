@@ -23,7 +23,7 @@ class CalculatorTest(unittest.TestCase):
         self.assertEqual(calc.get_minutes_in_offpeak_weekday(), 0)
         self.assertEqual(calc.get_minutes_in_peak_holiday(), 0)
         self.assertEqual(calc.get_minutes_in_offpeak_holiday(), 0)
-        # self.assertAlmostEqual(calc.cost_calculation(True, False), 6.60, places=2)
+        self.assertAlmostEqual(calc.cost_calculation(), 6.60, places=2)
     
     # Test off-peak non-holiday (T404)
     def test_weekday_night(self):
@@ -34,7 +34,7 @@ class CalculatorTest(unittest.TestCase):
         self.assertEqual(calc.get_minutes_in_offpeak_weekday(), 120)
         self.assertEqual(calc.get_minutes_in_peak_holiday(), 0)
         self.assertEqual(calc.get_minutes_in_offpeak_holiday(), 0)
-        # self.assertAlmostEqual(calc.cost_calculation(False, False), 3.30, places=2)
+        self.assertAlmostEqual(calc.cost_calculation(), 3.30, places=2)
     
     # Test peak holiday(T505)
     def test_peak_holiday(self):
@@ -45,8 +45,7 @@ class CalculatorTest(unittest.TestCase):
         self.assertEqual(calc.get_minutes_in_offpeak_weekday(), 0)
         self.assertEqual(calc.get_minutes_in_peak_holiday(), 120)
         self.assertEqual(calc.get_minutes_in_offpeak_holiday(), 0)
-
-        # self.assertAlmostEqual(calc.cost_calculation(True, True), 7.26, places=2)
+        self.assertAlmostEqual(calc.cost_calculation(), 7.26, places=2)
 
     # Test off-peak holiday (T705)
 
@@ -58,7 +57,7 @@ class CalculatorTest(unittest.TestCase):
         self.assertEqual(calc.get_minutes_in_offpeak_weekday(), 0)
         self.assertEqual(calc.get_minutes_in_peak_holiday(), 0)
         self.assertEqual(calc.get_minutes_in_offpeak_holiday(), 150)
-        # self.assertAlmostEqual(calc.cost_calculation(False, True), 0.13, places=2)
+        self.assertAlmostEqual(calc.cost_calculation(), 0.13, places=2)
 
 
 
