@@ -34,9 +34,15 @@ class Calculator():
 
     # you may add more parameters if needed, you may modify the formula also.
     def cost_calculation(self) -> float:
+        peek_weekday = self.get_minutes_in_peak_weekday() / self.get_duration_in_minutes()
+        peek_holiday = self.get_minutes_in_peak_holiday() / self.get_duration_in_minutes()
+        offpeak_weekday = self.get_minutes_in_offpeak_weekday() / self.get_duration_in_minutes()
+        offpeak_holiday = self.get_minutes_in_offpeak_holiday() / self.get_duration_in_minutes()
 
         cost = (self.final_state - self.initial_state) / 100 * self.capacity * self.config.get_base_price() / 100
-        return cost
+        cost_with_time_consideration = peek_weekday * cost + offpeak_weekday * 0.5 * cost + peek_holiday * 1.1 * cost
+        cost_with_time_consideration += offpeak_holiday * cost * 0.5 * 1.1
+        return cost_with_time_consideration
 
     # you may add more parameters if needed, you may also modify the formula.
     def time_calculation(self) -> float:

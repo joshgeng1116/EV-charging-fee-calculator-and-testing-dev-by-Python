@@ -57,7 +57,7 @@ class CalculatorTest(unittest.TestCase):
         self.assertEqual(calc.get_minutes_in_offpeak_weekday(), 0)
         self.assertEqual(calc.get_minutes_in_peak_holiday(), 0)
         self.assertEqual(calc.get_minutes_in_offpeak_holiday(), 150)
-        self.assertAlmostEqual(calc.cost_calculation(), 0.13, places=2)
+        self.assertAlmostEqual(calc.cost_calculation(), 0.14, places=2)
 
 
 
