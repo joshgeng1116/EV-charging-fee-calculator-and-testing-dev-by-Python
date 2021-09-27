@@ -13,6 +13,8 @@ from wtforms import StringField, DateField, TimeField
 from wtforms.validators import DataRequired, ValidationError, Optional
 from .postcode import Postcode, InvalidPostcodeException
 from .chargeconfig import JoulesupChargeConfigurations, InvalidConfigException
+from datetime import date, time
+
 
 # validation for form inputs
 class Calculator_Form(FlaskForm):
@@ -33,25 +35,76 @@ class Calculator_Form(FlaskForm):
             raise ValidationError('Field data is none')
         elif field.data == '':
             raise ValueError("cannot fetch data")
+        elif field.data < 0:
+            raise ValueError("Battery cannot have a negative capacity")
+        elif field.data == 0:
+            raise ValueError("Battery cannot have a capacity of zero")
+        try:
+            float(field.data)
+        except:
+            raise ValueError("Battery Capacity can only contain numbers > 0.")
 
     # validate initial charge here
     def validate_InitialCharge(self, field):
         # another example of how to compare initial charge with final charge
         # you may modify this part of the code
-        if field.data > self.FinalCharge.data:
+        if field.data is None:
+            raise ValidationError("Initial state of battery not provided")
+        elif field.data == '':
+            raise ValueError("cannot fetch data")
+        elif field.data < 0:
+            raise ValueError("Initial state of battery is not vaild.")
+        elif field.data > self.FinalCharge.data:
             raise ValueError("Initial charge data error")
+        elif field.data == 100:
+            raise ValueError("Battery cannot be charged since the Initial state of battery is full.")
+        elif field.data > 100:
+            raise ValueError("Invalid input, battery state cannot over 100%")
+        try:
+            int(field.data)
+        except:
+            raise ValueError("Battery state can only contain 0 < numbers <= 100.")
 
     # validate final charge here
     def validate_FinalCharge(self, field):
-        pass
+        if field.data is None:
+            raise ValidationError("Final state of battery not provided")
+        elif field.data == '':
+            raise ValueError("cannot fetch data")
+        elif field.data < 0:
+            raise ValueError("Final state of battery is not valid.")
+        elif field.data > self.FinalCharge.data:
+            raise ValueError("Final charge data error")
+        elif field.data == 100:
+            raise ValueError("Battery cannot be charged since the Final state of battery is full.")
+        elif field.data > 100:
+            raise ValueError("Invalid input, battery state cannot over 100%")
+        try:
+            int(field.data)
+        except:
+            raise ValueError("Battery state can only contain 0 < numbers <= 100.")
 
     # validate start date here
     def validate_StartDate(self, field):
-        pass
+        if field is None:
+            raise ValidationError('Start date is none')
+        elif field == '':
+            raise ValueError("cannot fetch start date")
+        try:
+            date.fromisoformat(field)
+        except:
+            raise ValueError("Start date in wrong form")
 
     # validate start time here
     def validate_StartTime(self, field):
-        pass
+        if field is None:
+            raise ValidationError('Start time is none')
+        elif field == '':
+            raise ValueError("cannot fetch start time")
+        try:
+            time.fromisoformat(field)
+        except:
+            raise ValueError("Start time in wrong form")
 
     # validate charger configuration here
     def validate_ChargerConfiguration(self, field):
@@ -63,7 +116,6 @@ class Calculator_Form(FlaskForm):
             except InvalidConfigException:
                 raise ValueError("Invalid charging configuration")
 
-
     # validate postcode here
     def validate_PostCode(self, field):
         if field is None:
@@ -72,4 +124,3 @@ class Calculator_Form(FlaskForm):
             Postcode(field)
         except InvalidPostcodeException:
             raise ValueError("Post code not found")
-
