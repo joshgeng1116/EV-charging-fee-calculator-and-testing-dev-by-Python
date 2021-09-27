@@ -11,6 +11,7 @@ in the Joules Up charging calculator website.
 from flask_wtf import FlaskForm
 from wtforms import StringField, DateField, TimeField
 from wtforms.validators import DataRequired, ValidationError, Optional
+from .postcode import Postcode, InvalidPostcodeException
 
 # validation for form inputs
 class Calculator_Form(FlaskForm):
@@ -57,4 +58,10 @@ class Calculator_Form(FlaskForm):
 
     # validate postcode here
     def validate_PostCode(self, field):
-        pass
+        if field is None:
+            raise ValidationError("Post code should not be none")
+        try:
+            Postcode(field)
+        except InvalidPostcodeException:
+            raise ValueError("Post code not found")
+
