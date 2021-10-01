@@ -10,7 +10,7 @@ from app.chargeconfig import ChargingConfig
 class EnergyCostCalculator(TimeSegments):
     def __init__(self, start_time: str, start_date: date, duration: float, postcode: Postcode,
                  config: ChargingConfig) -> None:
-        TimeSegments.__init__(self, self, start_date, duration, postcode)
+        TimeSegments.__init__(self, start_time, start_date, duration, postcode)
         self.config = config
 
     def calculate_cost(self):
