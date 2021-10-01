@@ -73,7 +73,6 @@ class Calculator_Form(FlaskForm):
         elif int(field) > 100:
             raise ValueError("Invalid input, battery state cannot over 100%")
 
-
     # validate start date here
     def validate_StartDate(self, field):
         try:
