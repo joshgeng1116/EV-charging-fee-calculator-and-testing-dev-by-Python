@@ -7,6 +7,7 @@ Date Modified: 2021-00-10
 A file which a class called calculator that runs the calculations for the 
 Joules Up battery charging online calculator. 
 """
+from math import ceil
 
 from app.chargeconfig import ChargingConfig
 from app.time_segments import TimeSegments
@@ -57,7 +58,7 @@ class Calculator():
 
     # you may create some new methods at your convenience, or modify these methods, or choose not to use them.
     def get_duration_in_minutes(self) -> float:
-        return self.time_calculation() * 60
+        return ceil(self.time_calculation() * 60)
     
     def get_minutes_in_peak_weekday(self):
         return self.timeSegments.get_minutes_in_peak_weekday()
