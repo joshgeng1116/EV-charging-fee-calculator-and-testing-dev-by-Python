@@ -8,6 +8,7 @@ A file which a class called calculator that runs the calculations for the
 Joules Up battery charging online calculator. 
 """
 
+from app.energy_cal import EnergyCostCalculator
 from app.chargeconfig import ChargingConfig
 from app.time_segments import TimeSegments
 from .postcode import Postcode
@@ -71,28 +72,11 @@ class Calculator():
     def get_minutes_in_offpeak_holiday(self):
         return self.timeSegments.get_minutes_in_offpeak_holiday()
 
-    # to be acquired through API
-    def get_sun_hour(self, sun_hour):
-        pass
-
-    # to be acquired through API
-    def get_solar_energy_duration(self, start_time):
-        pass
-
-    # to be acquired through API
-    def get_day_light_length(self, start_time):
-        pass
-
-    # to be acquired through API
-    def get_solar_insolation(self, solar_insolation):
-        pass
-
-    # to be acquired through API
-    def get_cloud_cover(self):
-        pass
-
-    def calculate_solar_energy(self):
-        pass
-
+class CalculatorWithSolarEnergy(Calculator):
+    def cost_calculation(self) -> float:
+        return EnergyCostCalculator(self.start_time, self.start_date, self.get_duration_in_minutes(), 
+            self.postcode, self.config).calculate_cost()
+        
+        
     
 
