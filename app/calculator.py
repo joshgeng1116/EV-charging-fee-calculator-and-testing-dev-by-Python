@@ -12,6 +12,7 @@ from app.energy_cal import EnergyCostCalculator
 from app.chargeconfig import ChargingConfig
 from app.time_segments import TimeSegments
 from .postcode import Postcode
+import math
 from datetime import date, timedelta, time
 
 from .time_converter import *
@@ -40,7 +41,7 @@ class Calculator():
         offpeak_weekday = self.get_minutes_in_offpeak_weekday() / self.get_duration_in_minutes()
         offpeak_holiday = self.get_minutes_in_offpeak_holiday() / self.get_duration_in_minutes()
 
-        cost = (self.final_state - self.initial_state) / 100 * self.capacity * self.config.get_base_price() / 100
+        cost = ((self.final_state - self.initial_state) / 100) * self.capacity * (self.config.get_base_price() / 100)
         cost_with_time_consideration = peek_weekday * cost + offpeak_weekday * 0.5 * cost + peek_holiday * 1.1 * cost
         cost_with_time_consideration += offpeak_holiday * cost * 0.5 * 1.1
         return cost_with_time_consideration
@@ -53,12 +54,8 @@ class Calculator():
         time = (self.final_state - self.initial_state) / 100 * self.capacity / self.config.get_power()
         return time
     
-    def get_duration_in_minutes(self) -> int:
-        return int(self.time_calculation() * 60)
-
-    # you may create some new methods at your convenience, or modify these methods, or choose not to use them.
     def get_duration_in_minutes(self) -> float:
-        return self.time_calculation() * 60
+        return math.ceil(self.time_calculation() * 60)
     
     def get_minutes_in_peak_weekday(self):
         return self.timeSegments.get_minutes_in_peak_weekday()
@@ -76,7 +73,7 @@ class CalculatorWithSolarEnergy(Calculator):
     def cost_calculation(self) -> float:
         return EnergyCostCalculator(self.start_time, self.start_date, self.get_duration_in_minutes(), 
             self.postcode, self.config).calculate_cost()
-        
+    
         
     
 
