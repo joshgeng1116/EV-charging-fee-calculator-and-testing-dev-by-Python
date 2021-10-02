@@ -6,3 +6,4 @@ from .time_segments_test import *
 from .chargeconfigtest import *
 from .calculatorpresentationtest import *
 from .weather_data_api_test import *
+from .energy_cal_test import *
