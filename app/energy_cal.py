@@ -91,22 +91,22 @@ class EnergyCalculator:
         if self.is_peak(hour):
             if self.is_holiday(new_date):
                 weather_data = WeatherData(new_date, self.postcode, hour, du)
-                energy = self.config.get_power() * du - weather_data.get_energy()
+                energy = self.config.get_power() * du - weather_data.get_solar_energy()
                 cost = energy * self.config.get_base_price()/100 * 1.1
                 return cost
             else:
                 weather_data = WeatherData(new_date, self.postcode, hour, du)
-                energy = self.config.get_power() * du - weather_data.get_energy()
+                energy = self.config.get_power() * du - weather_data.get_solar_energy()
                 cost = energy * self.config.get_base_price()/100
                 return cost
         else:
             if self.is_holiday(new_date):
                 weather_data = WeatherData(new_date, self.postcode, hour, du)
-                energy = self.config.get_power() * du - weather_data.get_energy()
+                energy = self.config.get_power() * du - weather_data.get_solar_energy()
                 cost = energy * self.config.get_base_price()/100 * 1.1 * 0.5
                 return cost
             else:
                 weather_data = WeatherData(new_date, self.postcode, hour, du)
-                energy = self.config.get_power() * du - weather_data.get_energy()
+                energy = self.config.get_power() * du - weather_data.get_solar_energy()
                 cost = energy * self.config.get_base_price()/100 * 0.5
                 return cost

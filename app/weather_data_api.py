@@ -12,14 +12,15 @@ class WeatherData:
         self.hour = hour
         self.duration = duration
 
-    def get_energy(self) -> float:
+    def get_location_id(self):
         post = str(self.postcode.get_postcode())
         url = "http://118.138.246.158/api/v1/location?postcode=" + post
         response = requests.get(url).json()
         id = response[0]['id']
-        return self.get_hourly_data(id)
+        return id
 
-    def get_hourly_data(self, id: str):
+    def get_weather_data_by_id(self):
+        id = self.get_location_id()
         url = "http://118.138.246.158/api/v1/weather?location=" + id + "&date=" + self.check_date.isoformat()
         response = requests.get(url).json()
         si = response['sunHours']
@@ -30,10 +31,16 @@ class WeatherData:
             if int(h['hour']) == self.hour:
                 cc = int(h['cloudCoverPct'])
         dl = (time_to_minutes(ss) - time_to_minutes(sr))/60
-        energy = self.calculate_hourly_solar_energy(si, sr, ss, dl, self.hour, cc, self.duration)
-        return energy
+        return si, sr, ss, cc, dl
 
-    def calculate_hourly_solar_energy(self, si: int, sr: str, ss: str, dl: int, hour: int, cc: int, du: float) -> float:
+    def get_solar_energy(self) -> float:
+        si = self.get_weather_data_by_id()[0]
+        sr = self.get_weather_data_by_id()[1]
+        ss = self.get_weather_data_by_id()[2]
+        cc = self.get_weather_data_by_id()[3]
+        dl = self.get_weather_data_by_id()[4]
+        hour = self.hour
+        du = self.duration
         energy: float
         if hour < int(sr[0:2]):
             energy = 0
@@ -44,3 +51,19 @@ class WeatherData:
         else:
             energy = 0
             return energy
+
+    def get_sun_hour(self):
+        return self.get_weather_data_by_id()[0]
+
+    def get_sun_rise(self):
+        return self.get_weather_data_by_id()[1]
+
+    def get_sun_set(self):
+        return self.get_weather_data_by_id()[2]
+
+    def get_cloud_cover(self):
+        return self.get_weather_data_by_id()[3]
+
+    def get_daylight_length(self):
+        return self.get_weather_data_by_id()[4]
+
