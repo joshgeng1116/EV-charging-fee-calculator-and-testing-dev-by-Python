@@ -29,6 +29,11 @@ You will need to install project dependencies for the provided code to work. Thi
 ```
 pip install -r requirements.txt
 ```
+### Start application
+To start the application you can simply just run main.py inside the virtual environment
+```
+python main.py
+```
 
 ### Exiting Virtualenv
 Once you are finished working on the project, you can exit virtualenv by running the following command:

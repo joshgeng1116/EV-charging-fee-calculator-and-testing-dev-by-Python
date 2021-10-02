@@ -144,7 +144,11 @@
             <td>{{ form.ChargerConfiguration.label }}</td>
             <td>
               {# {{ form.ChargerConfiguration }}#}
-              <input type="text" name="ChargerConfiguration" id="ChargerConfiguration"/>
+              <select name="ChargerConfiguration" id = "ChargerConfiguration">
+                {% for config in configs %}
+                <option value = "{{ config.number }}">{{ config.description }}</option>
+                {% endfor %}
+              </select>
             </td>
           </tr>
 

@@ -1,0 +1,33 @@
+stages:
+    - build 
+    - test
+
+build:
+    stage: build
+    image: python:3.8-alpine
+    script: 
+        - echo "Building"
+        - pip3 install --upgrade pip
+        - pip3 install -r requirements.txt
+        - python3 -m app.calculator
+
+test:
+    stage: test
+    image: python:3.8-alpine
+    
+    
+    script:
+        - echo "Testing"
+        - pip install -r requirements.txt
+        - pip install coverage
+        - coverage run --source=app --branch -m unittest test
+        - coverage report -m 
+        - coverage html -d coverage-reports
+
+    artifacts: 
+        paths:
+        - coverage-reports/
+
+
+
+

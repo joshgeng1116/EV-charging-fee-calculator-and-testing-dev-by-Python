@@ -139,3 +139,7 @@ cython_debug/
 
 # PyCharm Project Files
 .idea/
+
+# Vscode Project Files
+.vscode/
+.DS_Store
