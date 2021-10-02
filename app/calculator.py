@@ -69,28 +69,30 @@ class Calculator():
     def get_minutes_in_offpeak_holiday(self):
         return self.timeSegments.get_minutes_in_offpeak_holiday()
 
-    def date_converter(self, date: date) -> date:
-        if date.month == 2 and date.day == 29:
-            date.replace(day=28)
-            if date.year > datetime.date.today().year:
-                date.replace(year=datetime.date.today().year)
-                return date
+    def date_converter(self, start_date: date) -> date:
+        new_date = start_date
+        if new_date.month == 2 and new_date.day == 29:
+            new_date.replace(day=28)
+            if new_date.year > datetime.date.today().year:
+                new_date.replace(year=datetime.date.today().year)
+                return new_date
             else:
-                return date
+                return new_date
         else:
-            if date.year > datetime.date.today().year:
-                date.replace(year=datetime.date.today().year)
-                return date
+            if new_date.year > datetime.date.today().year:
+                new_date.replace(year=datetime.date.today().year)
+                return new_date
             else:
-                return date
+                return new_date
 
 
 class CalculatorWithSolarEnergy(Calculator):
     def cost_calculation(self) -> float:
-        current_date = datetime.date.today()
-        start_date = self.date_converter(date.fromisoformat(self.start_date))
+        current_date: date = datetime.date.today()
+        check_date: date = current_date - timedelta(days=2)
+        start_date: date = self.date_converter(self.start_date)
         total_cost = 0
-        if start_date > current_date - timedelta(days=2):
+        if start_date > check_date:
             for i in range(3):
                 new_date = start_date.replace(year=int(start_date.year) - (i + 1))
                 total_cost += EnergyCostCalculator(self.start_time, new_date, self.get_duration_in_minutes(),
@@ -103,17 +105,18 @@ class CalculatorWithSolarEnergy(Calculator):
         average_cost = total_cost / 3
         return average_cost
 
-    def date_converter(self, date: date) -> date:
-        if date.month == 2 and date.day == 29:
-            date.replace(day=28)
-            if date.year > datetime.date.today().year:
-                date.replace(year=datetime.date.today().year)
-                return date
+    def date_converter(self, start_date: str) -> date:
+        new_date = date.fromisoformat(start_date)
+        if new_date.month == 2 and new_date.day == 29:
+            new_date = new_date.replace(day=28)
+            if new_date.year > datetime.date.today().year:
+                new_date = new_date.replace(year=datetime.date.today().year)
+                return new_date
             else:
-                return date
+                return new_date
         else:
-            if date.year > datetime.date.today().year:
-                date.replace(year=datetime.date.today().year)
-                return date
+            if new_date.year > datetime.date.today().year:
+                new_date = new_date.replace(year=datetime.date.today().year)
+                return new_date
             else:
-                return date
+                return new_date
