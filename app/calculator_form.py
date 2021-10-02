@@ -13,6 +13,8 @@ from wtforms import StringField, DateField, TimeField
 from wtforms.validators import DataRequired, ValidationError, Optional
 from .postcode import Postcode, InvalidPostcodeException
 from .chargeconfig import JoulesupChargeConfigurations, InvalidConfigException
+from datetime import datetime, time
+import datetime
 
 # validation for form inputs
 class Calculator_Form(FlaskForm):
@@ -29,47 +31,74 @@ class Calculator_Form(FlaskForm):
     # use validate_ + field_name to activate the flask-wtforms built-in validator
     # this is an example for you
     def validate_BatteryPackCapacity(self, field):
-        if field.data is None:
-            raise ValidationError('Field data is none')
-        elif field.data == '':
-            raise ValueError("cannot fetch data")
+        try:
+            float(field)
+        except:
+            raise ValueError("Battery Capacity can only contain numbers > 0.")
+        if float(field) < 0:
+            raise ValueError("Battery cannot have a negative capacity")
+        elif float(field) == 0:
+            raise ValueError("Battery cannot have a capacity of zero")
 
     # validate initial charge here
     def validate_InitialCharge(self, field):
         # another example of how to compare initial charge with final charge
         # you may modify this part of the code
-        if field.data > self.FinalCharge.data:
+        try:
+            int(field)
+        except:
+            raise ValueError("Battery state can only contain numbers from 0 to 100.")
+
+        if int(field) < 0:
+            raise ValueError("Initial state of battery is not valid.")
+
+        elif int(field) == 100:
+            raise ValueError("Battery cannot be charged since the Initial state of battery is full.")
+        elif int(field) > 100:
+            raise ValueError("Invalid input, battery state cannot over 100%")
+        elif int(field) > int(self.FinalCharge.data):
             raise ValueError("Initial charge data error")
 
     # validate final charge here
     def validate_FinalCharge(self, field):
-        pass
+        try:
+            int(field)
+        except:
+            raise ValueError("Battery state can only contain numbers from 0 to 100.")
+        if int(field) < 0:
+            raise ValueError("Final state of battery is not valid.")
+        elif int(field) > 100:
+            raise ValueError("Invalid input, battery state cannot over 100%")
+        elif int(field) < int(self.InitialCharge.data):
+            raise ValueError("Final charge data error")
 
     # validate start date here
     def validate_StartDate(self, field):
-        pass
+        now = datetime.datetime.now()
+        d_start = datetime.datetime.strptime('01/01/2008', '%d/%m/%Y')
+        d_test = datetime.datetime.strptime(field, '%d/%m/%Y')
+        if d_test < d_start:
+            raise ValueError("Year of start date should be after 2008")
+        elif d_test > now:
+            raise ValueError("Start date should before today")
 
     # validate start time here
     def validate_StartTime(self, field):
-        pass
+        try:
+            time.fromisoformat(field)
+        except:
+            raise ValueError("Start time in wrong form")
 
     # validate charger configuration here
     def validate_ChargerConfiguration(self, field):
-        if field is None:
-            raise ValidationError("Charger configuration should not be None.")
-        else:
-            try:
-                JoulesupChargeConfigurations().get_config(field)
-            except InvalidConfigException:
-                raise ValueError("Invalid charging configuration")
-
+        try:
+            JoulesupChargeConfigurations().get_config(field)
+        except InvalidConfigException:
+            raise ValueError("Invalid charging configuration")
 
     # validate postcode here
     def validate_PostCode(self, field):
-        if field is None:
-            raise ValidationError("Post code should not be none")
         try:
             Postcode(field)
         except InvalidPostcodeException:
             raise ValueError("Post code not found")
-

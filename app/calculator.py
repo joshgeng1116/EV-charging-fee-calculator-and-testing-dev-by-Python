@@ -7,6 +7,7 @@ Date Modified: 2021-00-10
 A file which a class called calculator that runs the calculations for the 
 Joules Up battery charging online calculator. 
 """
+from math import ceil
 
 from app.energy_cal import EnergyCostCalculator
 from app.chargeconfig import ChargingConfig
