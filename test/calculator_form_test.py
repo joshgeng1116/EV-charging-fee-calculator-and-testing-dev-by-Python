@@ -167,7 +167,7 @@ class Calculator_FormTest(unittest.TestCase):
                     str(cm.exception)
                 )
 
-    def test_startDate_error(self):
+    def test_startDate_before2008(self):
         with self.app.app_context():
             with self.app.test_request_context('/hello', method='POST'):
                 assert request.path == '/hello'
@@ -176,7 +176,20 @@ class Calculator_FormTest(unittest.TestCase):
                 with self.assertRaises(ValueError) as cm:
                     self.mock_Calculator_Form.validate_StartDate("20/08/2007")
                 self.assertEqual(
-                    "Start date in wrong form",
+                    "Year of start date should be after 2008",
+                    str(cm.exception)
+                )
+
+    def test_startDate_after_today(self):
+        with self.app.app_context():
+            with self.app.test_request_context('/hello', method='POST'):
+                assert request.path == '/hello'
+                assert request.method == 'POST'
+                self.mock_Calculator_Form = Calculator_Form()
+                with self.assertRaises(ValueError) as cm:
+                    self.mock_Calculator_Form.validate_StartDate("20/08/2050")
+                self.assertEqual(
+                    "Start date should before today",
                     str(cm.exception)
                 )
 

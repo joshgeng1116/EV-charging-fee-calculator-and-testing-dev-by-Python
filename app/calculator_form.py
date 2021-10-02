@@ -14,7 +14,7 @@ from wtforms.validators import DataRequired, ValidationError, Optional
 from .postcode import Postcode, InvalidPostcodeException
 from .chargeconfig import JoulesupChargeConfigurations, InvalidConfigException
 from datetime import datetime, time
-
+import datetime
 
 # validation for form inputs
 class Calculator_Form(FlaskForm):
@@ -74,9 +74,13 @@ class Calculator_Form(FlaskForm):
 
     # validate start date here
     def validate_StartDate(self, field):
-        x = datetime.datetime.field.strptime(field, '%Y')
-        if x < 2008:
+        now = datetime.datetime.now()
+        d_start = datetime.datetime.strptime('01/01/2008', '%d/%m/%Y')
+        d_test = datetime.datetime.strptime(field, '%d/%m/%Y')
+        if d_test < d_start:
             raise ValueError("Year of start date should be after 2008")
+        elif d_test > now:
+            raise ValueError("Start date should before today")
 
     # validate start time here
     def validate_StartTime(self, field):
