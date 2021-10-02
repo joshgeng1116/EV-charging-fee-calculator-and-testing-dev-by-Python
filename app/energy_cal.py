@@ -22,7 +22,7 @@ class EnergyCostCalculator(TimeSegments):
             new_date: date = self.start_date + timedelta(days=i)
             if i == 0:
                 hour = int(start_time[0:2])
-                while hour < 24 and remain_duration > 60:
+                while hour < 24 and int(start_time[0:2]) + remain_duration > 60:
                     if hour == int(start_time[0:2]):
                         du = (60 - int(start_time[3:])) / 60
                         cost += self.hourly_cost_cal(new_date, hour, du)
@@ -31,15 +31,9 @@ class EnergyCostCalculator(TimeSegments):
                         cost += self.hourly_cost_cal(new_date, hour, du)
                     hour += 1
                     remain_duration -= du * 60
-                if hour < 24 and remain_duration < 60:
-                    if hour == int(start_time[0:2]):
-                        du = (60 - int(start_time[3:]) - remain_duration) / 60
-                        cost += self.hourly_cost_cal(new_date, hour, du)
-
-                    else:
-                        du = remain_duration / 60
-                        cost += self.hourly_cost_cal(new_date, hour, du)
-
+                if hour < 24 and remain_duration + int(start_time[0:2]) < 60:
+                    du = remain_duration / 60
+                    cost += self.hourly_cost_cal(new_date, hour, du)
             elif 0 < i <= days:
                 hour = 0
                 start_time = "00:00"
@@ -51,7 +45,7 @@ class EnergyCostCalculator(TimeSegments):
                 if hour < 24 and remain_duration < 60:
                     du = remain_duration / 60
                     cost += self.hourly_cost_cal(new_date, hour, du)
-
+                    return cost
         return cost
 
     def is_peak(self, hour) -> bool:

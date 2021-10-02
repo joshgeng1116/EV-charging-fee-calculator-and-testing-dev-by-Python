@@ -19,12 +19,17 @@ class TestEnergyCost(TestCase):
     def test_get_energy_cost1(self):
         energy_cost = EnergyCostCalculator("12:05", date.fromisoformat("2021-09-24"), 20, Postcode("3168"),
                                            JoulesupChargeConfigurations.LEVEL_5)
-        self.assertAlmostEqual(energy_cost.calculate_cost(), 2.12, places=2)
+        self.assertAlmostEqual(energy_cost.calculate_cost(), 1.21, places=2)
 
     def test_get_energy_cost2(self):
         energy_cost = EnergyCostCalculator("12:05", date.fromisoformat("2021-09-24"), 65, Postcode("3168"),
                                            JoulesupChargeConfigurations.LEVEL_5)
         self.assertAlmostEqual(energy_cost.calculate_cost(), 3.93, places=2)
+
+    def test_get_energy_cost3(self):
+        energy_cost = EnergyCostCalculator("12:00", date.fromisoformat("2021-01-01"), 1, Postcode("3168"),
+                                           JoulesupChargeConfigurations.LEVEL_8)
+        self.assertAlmostEqual(energy_cost.calculate_cost(), 3.19, places=2)
 
     # start time xx:00
     def test_get_energy_cost_mock(self):
