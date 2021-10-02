@@ -13,6 +13,7 @@ from app.chargeconfig import ChargingConfig
 from app.time_segments import TimeSegments
 from .postcode import Postcode
 import math
+import datetime
 from datetime import date, timedelta, time
 
 from .time_converter import *
@@ -21,18 +22,17 @@ from app import time_converter
 
 class Calculator():
     # you can choose to initialise variables here, if needed.
-    def __init__(self, inital_state: float, final_state: float, capacity: float, 
-        config: ChargingConfig, start_time: time, start_date: date, postcode: Postcode):
+    def __init__(self, inital_state: float, final_state: float, capacity: float,
+                 config: ChargingConfig, start_time: time, start_date: date, postcode: Postcode):
         self.initial_state = inital_state
-        self.final_state = final_state 
+        self.final_state = final_state
         self.capacity = capacity
         self.config = config
         self.start_time = start_time
         self.start_date = start_date
         self.postcode = postcode
-        self.timeSegments = TimeSegments(start_time, date.fromisoformat(self.start_date), 
-            self.get_duration_in_minutes(), self.postcode)
-        
+        self.timeSegments = TimeSegments(start_time, date.fromisoformat(self.start_date),
+                                         self.get_duration_in_minutes(), self.postcode)
 
     # you may add more parameters if needed, you may modify the formula also.
     def cost_calculation(self) -> float:
@@ -53,27 +53,67 @@ class Calculator():
         """
         time = (self.final_state - self.initial_state) / 100 * self.capacity / self.config.get_power()
         return time
-    
+
     def get_duration_in_minutes(self) -> float:
         return math.ceil(self.time_calculation() * 60)
-    
+
     def get_minutes_in_peak_weekday(self):
         return self.timeSegments.get_minutes_in_peak_weekday()
 
     def get_minutes_in_offpeak_weekday(self):
         return self.timeSegments.get_minutes_in_offpeak_weekday()
-    
+
     def get_minutes_in_peak_holiday(self):
         return self.timeSegments.get_minutes_in_peak_holiday()
-    
+
     def get_minutes_in_offpeak_holiday(self):
         return self.timeSegments.get_minutes_in_offpeak_holiday()
 
+    def date_converter(self, date: date) -> date:
+        if date.month == 2 and date.day == 29:
+            date.replace(day=28)
+            if date.year > datetime.date.today().year:
+                date.replace(year=datetime.date.today().year)
+                return date
+            else:
+                return date
+        else:
+            if date.year > datetime.date.today().year:
+                date.replace(year=datetime.date.today().year)
+                return date
+            else:
+                return date
+
+
 class CalculatorWithSolarEnergy(Calculator):
     def cost_calculation(self) -> float:
-        return EnergyCostCalculator(self.start_time, self.start_date, self.get_duration_in_minutes(), 
-            self.postcode, self.config).calculate_cost()
-    
-        
-    
+        current_date = datetime.date.today()
+        start_date = self.date_converter(date.fromisoformat(self.start_date))
+        total_cost = 0
+        if start_date > current_date - timedelta(days=2):
+            for i in range(3):
+                new_date = start_date.replace(year=int(start_date.year) - (i + 1))
+                total_cost += EnergyCostCalculator(self.start_time, new_date, self.get_duration_in_minutes(),
+                                                   self.postcode, self.config).calculate_cost()
+        else:
+            for i in range(3):
+                new_date = start_date.replace(year=int(start_date.year) - i)
+                total_cost += EnergyCostCalculator(self.start_time, new_date, self.get_duration_in_minutes(),
+                                                   self.postcode, self.config).calculate_cost()
+        average_cost = total_cost / 3
+        return average_cost
 
+    def date_converter(self, date: date) -> date:
+        if date.month == 2 and date.day == 29:
+            date.replace(day=28)
+            if date.year > datetime.date.today().year:
+                date.replace(year=datetime.date.today().year)
+                return date
+            else:
+                return date
+        else:
+            if date.year > datetime.date.today().year:
+                date.replace(year=datetime.date.today().year)
+                return date
+            else:
+                return date
