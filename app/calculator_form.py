@@ -13,7 +13,7 @@ from wtforms import StringField, DateField, TimeField
 from wtforms.validators import DataRequired, ValidationError, Optional
 from .postcode import Postcode, InvalidPostcodeException
 from .chargeconfig import JoulesupChargeConfigurations, InvalidConfigException
-from datetime import date, time
+from datetime import datetime, time
 
 
 # validation for form inputs
@@ -50,13 +50,14 @@ class Calculator_Form(FlaskForm):
             raise ValueError("Battery state can only contain numbers from 0 to 100.")
 
         if int(field) < 0:
-            raise ValueError("Initial state of battery is not vaild.")
-        elif int(field) > self.FinalCharge.data:
-            raise ValueError("Initial charge data error")
+            raise ValueError("Initial state of battery is not valid.")
+
         elif int(field) == 100:
             raise ValueError("Battery cannot be charged since the Initial state of battery is full.")
         elif int(field) > 100:
             raise ValueError("Invalid input, battery state cannot over 100%")
+        elif int(field) > int(self.FinalCharge.data):
+            raise ValueError("Initial charge data error")
 
     # validate final charge here
     def validate_FinalCharge(self, field):
@@ -66,19 +67,16 @@ class Calculator_Form(FlaskForm):
             raise ValueError("Battery state can only contain numbers from 0 to 100.")
         if int(field) < 0:
             raise ValueError("Final state of battery is not valid.")
-        elif int(field) > self.FinalCharge.data:
-            raise ValueError("Final charge data error")
-        elif int(field) == 100:
-            raise ValueError("Battery cannot be charged since the Final state of battery is full.")
         elif int(field) > 100:
             raise ValueError("Invalid input, battery state cannot over 100%")
+        elif int(field) < int(self.InitialCharge.data):
+            raise ValueError("Final charge data error")
 
     # validate start date here
     def validate_StartDate(self, field):
-        try:
-            date.fromisoformat(field)
-        except:
-            raise ValueError("Start date in wrong form")
+        x = datetime.datetime.field.strptime(field, '%Y')
+        if x < 2008:
+            raise ValueError("Year of start date should be after 2008")
 
     # validate start time here
     def validate_StartTime(self, field):
