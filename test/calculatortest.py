@@ -181,6 +181,20 @@ class CalculatorTest(unittest.TestCase):
         self.assertEqual(calc.get_minutes_in_peak_holiday(), 120)
         self.assertEqual(calc.get_minutes_in_offpeak_holiday(), 360)
         self.assertAlmostEqual(calc.cost_calculation(), 1.65, places=2)
+        
+     def test_weekday_night_with_solar_energy(self):
+        calc = CalculatorWithSolarEnergy(20, 75, 80, JoulesupChargeConfigurations.LEVEL_5, "18:00", "2021-08-20", Postcode("3800"))
+        self.assertAlmostEqual(calc.cost_calculation(), 3.3, places=2)
+
+    def test_date_2020_02_29_with_solar_energy(self):
+        calc = CalculatorWithSolarEnergy(20, 75, 80, JoulesupChargeConfigurations.LEVEL_5, "18:00", "2020-02-29",
+                                         Postcode("3168"))
+        self.assertAlmostEqual(calc.cost_calculation(), 2.82, places=2)
+
+    def test_calculator_with_solar_energy(self):
+        calc = CalculatorWithSolarEnergy(20, 75, 80, JoulesupChargeConfigurations.LEVEL_5, "12:00", "2023-08-20",
+                                         Postcode("3800"))
+        self.assertAlmostEqual(calc.cost_calculation(), 3.26, places=2)
 
 
 def main():
