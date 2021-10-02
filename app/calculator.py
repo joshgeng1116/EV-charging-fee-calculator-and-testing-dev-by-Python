@@ -69,21 +69,6 @@ class Calculator():
     def get_minutes_in_offpeak_holiday(self):
         return self.timeSegments.get_minutes_in_offpeak_holiday()
 
-    def date_converter(self, start_date: date) -> date:
-        new_date = start_date
-        if new_date.month == 2 and new_date.day == 29:
-            new_date.replace(day=28)
-            if new_date.year > datetime.date.today().year:
-                new_date.replace(year=datetime.date.today().year)
-                return new_date
-            else:
-                return new_date
-        else:
-            if new_date.year > datetime.date.today().year:
-                new_date.replace(year=datetime.date.today().year)
-                return new_date
-            else:
-                return new_date
 
 
 class CalculatorWithSolarEnergy(Calculator):
