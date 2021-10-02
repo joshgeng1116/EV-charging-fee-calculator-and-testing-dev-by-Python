@@ -1,7 +1,13 @@
 from app.calculator_form import Calculator_Form
 import unittest
 from flask import Flask, request
+from datetime import date
 import os
+
+
+class test_Field():
+    def __init__(self, data):
+        self.data = data
 
 
 class Calculator_FormTest(unittest.TestCase):
@@ -16,7 +22,8 @@ class Calculator_FormTest(unittest.TestCase):
                 assert request.method == 'POST'
                 self.mock_Calculator_Form = Calculator_Form()
                 with self.assertRaises(ValueError) as cm:
-                    self.mock_Calculator_Form.validate_BatteryPackCapacity("ac/vdsx%")
+                    field = test_Field(data="ac/vdsx%")
+                    self.mock_Calculator_Form.validate_BatteryPackCapacity(field)
                 self.assertEqual(
                     "Battery Capacity can only contain numbers > 0.",
                     str(cm.exception)
@@ -29,7 +36,8 @@ class Calculator_FormTest(unittest.TestCase):
                 assert request.method == 'POST'
                 self.mock_Calculator_Form = Calculator_Form()
                 with self.assertRaises(ValueError) as cm:
-                    self.mock_Calculator_Form.validate_BatteryPackCapacity("-1")
+                    field = test_Field(data="-1")
+                    self.mock_Calculator_Form.validate_BatteryPackCapacity(field)
                 self.assertEqual(
                     "Battery cannot have a negative capacity",
                     str(cm.exception)
@@ -42,7 +50,8 @@ class Calculator_FormTest(unittest.TestCase):
                 assert request.method == 'POST'
                 self.mock_Calculator_Form = Calculator_Form()
                 with self.assertRaises(ValueError) as cm:
-                    self.mock_Calculator_Form.validate_BatteryPackCapacity("0")
+                    field = test_Field(data='0')
+                    self.mock_Calculator_Form.validate_BatteryPackCapacity(field)
                 self.assertEqual(
                     "Battery cannot have a capacity of zero",
                     str(cm.exception)
@@ -55,7 +64,8 @@ class Calculator_FormTest(unittest.TestCase):
                 assert request.method == 'POST'
                 self.mock_Calculator_Form = Calculator_Form()
                 with self.assertRaises(ValueError) as cm:
-                    self.mock_Calculator_Form.validate_InitialCharge("sankmjdasjmhb")
+                    field = test_Field(data='sankmjdasjmhb')
+                    self.mock_Calculator_Form.validate_InitialCharge(field)
                 self.assertEqual(
                     "Battery state can only contain numbers from 0 to 100.",
                     str(cm.exception)
@@ -68,7 +78,8 @@ class Calculator_FormTest(unittest.TestCase):
                 assert request.method == 'POST'
                 self.mock_Calculator_Form = Calculator_Form()
                 with self.assertRaises(ValueError) as cm:
-                    self.mock_Calculator_Form.validate_InitialCharge("-1")
+                    field = test_Field(data="-1")
+                    self.mock_Calculator_Form.validate_InitialCharge(field)
                 self.assertEqual(
                     "Initial state of battery is not valid.",
                     str(cm.exception)
@@ -81,7 +92,8 @@ class Calculator_FormTest(unittest.TestCase):
                 assert request.method == 'POST'
                 self.mock_Calculator_Form = Calculator_Form()
                 with self.assertRaises(ValueError) as cm:
-                    self.mock_Calculator_Form.validate_InitialCharge("100")
+                    field = test_Field(data="100")
+                    self.mock_Calculator_Form.validate_InitialCharge(field)
                 self.assertEqual(
                     "Battery cannot be charged since the Initial state of battery is full.",
                     str(cm.exception)
@@ -94,7 +106,8 @@ class Calculator_FormTest(unittest.TestCase):
                 assert request.method == 'POST'
                 self.mock_Calculator_Form = Calculator_Form()
                 with self.assertRaises(ValueError) as cm:
-                    self.mock_Calculator_Form.validate_InitialCharge("101")
+                    field = test_Field(data="101")
+                    self.mock_Calculator_Form.validate_InitialCharge(field)
                 self.assertEqual(
                     "Invalid input, battery state cannot over 100%",
                     str(cm.exception)
@@ -108,7 +121,8 @@ class Calculator_FormTest(unittest.TestCase):
                 self.mock_Calculator_Form = Calculator_Form()
                 with self.assertRaises(ValueError) as cm:
                     self.mock_Calculator_Form.FinalCharge.data = 2
-                    self.mock_Calculator_Form.validate_InitialCharge(50)
+                    field = test_Field(data='50')
+                    self.mock_Calculator_Form.validate_InitialCharge(field)
                 self.assertEqual(
                     "Initial charge data error",
                     str(cm.exception)
@@ -121,7 +135,8 @@ class Calculator_FormTest(unittest.TestCase):
                 assert request.method == 'POST'
                 self.mock_Calculator_Form = Calculator_Form()
                 with self.assertRaises(ValueError) as cm:
-                    self.mock_Calculator_Form.validate_FinalCharge("sankmjdasjmhb")
+                    field = test_Field(data='sankmjdasjmhb')
+                    self.mock_Calculator_Form.validate_FinalCharge(field)
                 self.assertEqual(
                     "Battery state can only contain numbers from 0 to 100.",
                     str(cm.exception)
@@ -134,7 +149,8 @@ class Calculator_FormTest(unittest.TestCase):
                 assert request.method == 'POST'
                 self.mock_Calculator_Form = Calculator_Form()
                 with self.assertRaises(ValueError) as cm:
-                    self.mock_Calculator_Form.validate_FinalCharge("-1")
+                    field = test_Field(data='-1')
+                    self.mock_Calculator_Form.validate_FinalCharge(field)
                 self.assertEqual(
                     "Final state of battery is not valid.",
                     str(cm.exception)
@@ -147,7 +163,8 @@ class Calculator_FormTest(unittest.TestCase):
                 assert request.method == 'POST'
                 self.mock_Calculator_Form = Calculator_Form()
                 with self.assertRaises(ValueError) as cm:
-                    self.mock_Calculator_Form.validate_FinalCharge("101")
+                    field = test_Field(data='101')
+                    self.mock_Calculator_Form.validate_FinalCharge(field)
                 self.assertEqual(
                     "Invalid input, battery state cannot over 100%",
                     str(cm.exception)
@@ -161,7 +178,8 @@ class Calculator_FormTest(unittest.TestCase):
                 self.mock_Calculator_Form = Calculator_Form()
                 with self.assertRaises(ValueError) as cm:
                     self.mock_Calculator_Form.InitialCharge.data = 75
-                    self.mock_Calculator_Form.validate_FinalCharge(20)
+                    field = test_Field(data="20")
+                    self.mock_Calculator_Form.validate_FinalCharge(field)
                 self.assertEqual(
                     "Final charge data error",
                     str(cm.exception)
@@ -174,37 +192,14 @@ class Calculator_FormTest(unittest.TestCase):
                 assert request.method == 'POST'
                 self.mock_Calculator_Form = Calculator_Form()
                 with self.assertRaises(ValueError) as cm:
-                    self.mock_Calculator_Form.validate_StartDate("20/08/2007")
+                    field = test_Field(data=date.fromisoformat('2007-08-20'))
+                    self.mock_Calculator_Form.validate_StartDate(field)
                 self.assertEqual(
                     "Year of start date should be after 2008",
                     str(cm.exception)
                 )
 
-    def test_startDate_after_today(self):
-        with self.app.app_context():
-            with self.app.test_request_context('/hello', method='POST'):
-                assert request.path == '/hello'
-                assert request.method == 'POST'
-                self.mock_Calculator_Form = Calculator_Form()
-                with self.assertRaises(ValueError) as cm:
-                    self.mock_Calculator_Form.validate_StartDate("20/08/2050")
-                self.assertEqual(
-                    "Start date should before today",
-                    str(cm.exception)
-                )
 
-    def test_startTime_error(self):
-        with self.app.app_context():
-            with self.app.test_request_context('/hello', method='POST'):
-                assert request.path == '/hello'
-                assert request.method == 'POST'
-                self.mock_Calculator_Form = Calculator_Form()
-                with self.assertRaises(ValueError) as cm:
-                    self.mock_Calculator_Form.validate_StartTime("26:88")
-                self.assertEqual(
-                    "Start time in wrong form",
-                    str(cm.exception)
-                )
 
     def test_chargerConfiguration_error(self):
         with self.app.app_context():
@@ -213,7 +208,8 @@ class Calculator_FormTest(unittest.TestCase):
                 assert request.method == 'POST'
                 self.mock_Calculator_Form = Calculator_Form()
                 with self.assertRaises(ValueError) as cm:
-                    self.mock_Calculator_Form.validate_ChargerConfiguration("10")
+                    field = test_Field(data="10")
+                    self.mock_Calculator_Form.validate_ChargerConfiguration(field)
                 self.assertEqual(
                     "Invalid charging configuration",
                     str(cm.exception)
@@ -226,12 +222,12 @@ class Calculator_FormTest(unittest.TestCase):
                 assert request.method == 'POST'
                 self.mock_Calculator_Form = Calculator_Form()
                 with self.assertRaises(ValueError) as cm:
-                    self.mock_Calculator_Form.validate_PostCode("80305")
+                    field = test_Field(data="80305")
+                    self.mock_Calculator_Form.validate_PostCode(field)
                 self.assertEqual(
                     "Post code not found",
                     str(cm.exception)
                 )
-
 
 
 def main():
