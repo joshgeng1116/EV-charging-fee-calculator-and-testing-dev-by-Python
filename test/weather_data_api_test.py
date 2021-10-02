@@ -13,7 +13,6 @@ class WeatherDataTest(TestCase):
     def test_get_id(self):
         weather_data = WeatherData(date.fromisoformat("2021-09-01"), Postcode("3168"), 6, 1)
         weather_data.get_weather_data_by_id = Mock(return_value="dac1a3a1-3ea5-4215-a073-3348d53b518f")
-        weather_data.
         self.assertEqual(weather_data.get_weather_data_by_id(), "dac1a3a1-3ea5-4215-a073-3348d53b518f")
 
     def test_cannot_get_id(self):

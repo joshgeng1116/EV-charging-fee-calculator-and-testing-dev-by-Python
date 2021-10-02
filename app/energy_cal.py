@@ -1,3 +1,4 @@
+from app.time_segments import TimeSegments
 from app.postcode import Postcode
 from app.time_converter import time_to_minutes
 from datetime import date, timedelta
@@ -6,16 +7,13 @@ from app.weather_data_api import WeatherData
 from app.chargeconfig import ChargingConfig
 
 
-class EnergyCalculator:
+class EnergyCostCalculator(TimeSegments):
     def __init__(self, start_time: str, start_date: date, duration: float, postcode: Postcode,
                  config: ChargingConfig) -> None:
-        self.start_time = start_time
-        self.start_date = start_date
-        self.duration = duration
-        self.postcode = postcode
+        TimeSegments.__init__(self, start_time, start_date, duration, postcode)
         self.config = config
 
-    def cost(self):
+    def calculate_cost(self):
         start_time = self.start_time
         remain_duration = self.duration
         days = int(self.number_of_days())
@@ -63,22 +61,6 @@ class EnergyCalculator:
                         cost += self.hourly_cost_cal(new_date, hour, du)
                         return cost
         print(cost)
-
-    def is_holiday(self, check_date) -> bool:
-        holidays_cal = AUHolidays(prov=self.postcode.get_state())
-        # If day is on the weekend
-        if check_date.isoweekday() in [6, 7]:
-            return True
-        elif check_date in holidays_cal:
-            return True
-        else:
-            return False
-
-    def number_of_days(self) -> int:
-        start_time_minutes = time_to_minutes(self.start_time)
-        time_cost_in_minutes = self.duration
-        days = (start_time_minutes + time_cost_in_minutes) // 1440
-        return days
 
     def is_peak(self, hour) -> bool:
         if 6 <= hour <= 18:
