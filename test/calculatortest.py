@@ -11,6 +11,7 @@ from app.postcode import Postcode
 from app.calculator import Calculator
 from app.chargeconfig import JoulesupChargeConfigurations
 import unittest
+from unittest.mock import patch 
 
 
 class CalculatorTest(unittest.TestCase):
