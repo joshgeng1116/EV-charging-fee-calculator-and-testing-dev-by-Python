@@ -41,3 +41,11 @@ class WeatherDataTest(TestCase):
     def test_get_solar_energy(self):
         weather_data = WeatherData(date.fromisoformat("2021-09-01"), Postcode("3168"), 6, 1)
         self.assertEqual(weather_data.get_solar_energy(), 3.1976366322008865)
+
+    def test_get_solar_energy_before_sun_rise(self):
+        weather_data = WeatherData(date.fromisoformat("2021-09-01"), Postcode("3168"), 2, 1)
+        self.assertEqual(weather_data.get_solar_energy(), 0)
+
+    def test_get_solar_energy_after_sun_set(self):
+        weather_data = WeatherData(date.fromisoformat("2021-09-01"), Postcode("3168"), 22, 1)
+        self.assertEqual(weather_data.get_solar_energy(), 0)
