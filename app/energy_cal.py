@@ -42,23 +42,15 @@ class EnergyCostCalculator(TimeSegments):
 
             elif 0 < i <= days:
                 hour = 0
+                start_time = "00:00"
                 while hour < 24 and remain_duration > 60:
-                    if hour == int(start_time[0:2]):
-                        du = (60 - int(start_time[3:])) / 60
-                        cost += self.hourly_cost_cal(new_date, hour, du)
-                    else:
-                        du = 1
-                        cost += self.hourly_cost_cal(new_date, hour, du)
+                    du = 1
+                    cost += self.hourly_cost_cal(new_date, hour, du)
                     hour += 1
                     remain_duration -= du * 60
                 if hour < 24 and remain_duration < 60:
-                    if hour == int(start_time[0:2]):
-                        du = (60 - int(start_time[3:]) - remain_duration) / 60
-                        cost += self.hourly_cost_cal(new_date, hour, du)
-
-                    else:
-                        du = remain_duration / 60
-                        cost += self.hourly_cost_cal(new_date, hour, du)
+                    du = remain_duration / 60
+                    cost += self.hourly_cost_cal(new_date, hour, du)
 
         return cost
 
